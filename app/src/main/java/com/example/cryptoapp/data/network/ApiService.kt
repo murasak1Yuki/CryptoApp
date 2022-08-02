@@ -1,10 +1,9 @@
-package com.example.cryptoapp.api
+package com.example.cryptoapp.data.network
 
+import com.example.cryptoapp.data.network.model.CoinInfoJsonContainerDto
+import com.example.cryptoapp.data.network.model.CoinNamesListDto
 import retrofit2.http.GET
-import io.reactivex.Single
 import retrofit2.http.Query
-import com.example.cryptoapp.pojo.CoinInfoListOfData
-import com.example.cryptoapp.pojo.CoinPriceInfoRawData
 
 
 /**
@@ -18,11 +17,11 @@ interface ApiService {
      * @param [tSym] Валюта в которую конвертируем
      */
     @GET("top/totalvolfull")
-    fun getTopCoinsInfo(
+    suspend fun getTopCoinsInfo(
         @Query(QUERY_PARAM_API_KEY) apiKey: String = API_KEY,
         @Query(QUERY_PARAM_LIMIT) limit: Int = 10,
         @Query(QUERY_PARAM_TO_SYMBOL) tSym: String = CURRENCY,
-    ): Single<CoinInfoListOfData>
+    ): CoinNamesListDto
 
 
     /**
@@ -31,11 +30,11 @@ interface ApiService {
      * @param [fSyms] Криптовалюты, выбранные из списка самых популярных
      */
     @GET("pricemultifull")
-    fun getFullPriceList(
+    suspend fun getFullPriceList(
         @Query(QUERY_PARAM_TO_SYMBOLS) tSyms: String = CURRENCY,
         @Query(QUERY_PARAM_FROM_SYMBOLS) fSyms: String,
         @Query(QUERY_PARAM_API_KEY) apiKey: String = API_KEY,
-        ): Single<CoinPriceInfoRawData>
+    ): CoinInfoJsonContainerDto
 
     companion object {
         private const val QUERY_PARAM_LIMIT = "limit"
@@ -44,7 +43,8 @@ interface ApiService {
         private const val QUERY_PARAM_FROM_SYMBOLS = "fsyms"
         private const val QUERY_PARAM_TO_SYMBOLS = "tsyms"
 
-        private const val API_KEY = "e97ef5cbacb3c46ee81322937821e6051cdf3b7ab5f5bf5cd4e4247fcb19eedb"
+        private const val API_KEY =
+            "e97ef5cbacb3c46ee81322937821e6051cdf3b7ab5f5bf5cd4e4247fcb19eedb"
         private const val CURRENCY = "USD"
     }
 }
